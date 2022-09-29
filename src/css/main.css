@@ -1,0 +1,24 @@
+.controls {
+    display: flex;
+    justify-content: center;
+    border-bottom: 2px solid black;
+    height: 100px;
+}
+
+.floor {
+    display: flex;
+    height: 125px;
+    border-bottom: 2px solid black;
+    align-items: center;
+}
+
+.lift {
+    height: 125px;
+    width: 5%;
+    background-color: lightblue;
+    position: absolute;
+}
+
+.simulation {
+    display: flex;
+}
