@@ -13,10 +13,10 @@ function generate() {
     let liftCount = +document.getElementById("lift-count").value
 
     if (floorCount == undefined || floorCount <= 0 || floorCount > 10) {
-        alert("Invalid Floors")
+        alert("Floors must be between 1 and 10")
         return
     } else if (liftCount == undefined || liftCount <= 0 || liftCount > 10) {
-        alert("Invalid Lifts")
+        alert("Lifts must be between 1 and 10")
         return
     }
 
@@ -24,23 +24,40 @@ function generate() {
         let floor = document.createElement('div')
         floor.id = `floor-${i}`
         floor.className = 'floor'
-        let button = document.createElement('button')
-        button.id = `floor-btn-${i}`
-        button.addEventListener('click', () => callLift(`${i}`))
-        button.innerHTML = "Call"
-        floor.appendChild(button)
+
+        if (i != 0) {
+            let button = document.createElement('button')
+            button.className = 'btn'
+            button.id = `floor-btn-${i}`
+            button.addEventListener('click', () => callLift(`${i}`))
+            floor.appendChild(button)
+            button.innerHTML = "Up"
+        }
+
+        if (i != floorCount - 1) {
+            let button2 = document.createElement('button')
+            button2.className = 'btn'
+            button2.id = `floor-btn-${i}`
+            button2.addEventListener('click', () => callLift(`${i}`))
+            button2.innerHTML = "Down"
+            floor.appendChild(button2)
+        }
+        
         simulation.appendChild(floor)
         floors.push(floor)
     }
 
     let offset = floors[floors.length - 1].offsetTop
-    let leftOffset = 6;
+    let leftOffset = 100;
     for (let i = 0; i < liftCount; i++) {
         let lift = document.createElement('div')
         lift.className = 'lift'
         simulation.appendChild(lift)
         lift.style.top = offset + "px"
-        lift.style.left = (leftOffset + i * 10) + "%"
+        lift.style.left = (leftOffset + i * 150) + "px"
+        let door = document.createElement('div')
+        door.className = 'door'
+        lift.appendChild(door)
         lifts.unshift(lift)
     }
 
@@ -54,26 +71,66 @@ function callLift(floor) {
     moveLift()
 }
 
-function moveLift() {
-    if (liftsAvailable.length === 0) {
-        return
+function delay (miliseconds) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve()
+        }, miliseconds)
+    })
+}
+
+async function moveLift() {
+    while (liftsAvailable.length === 0) {
+        await delay(100)
     }
 
     let lift = liftsAvailable.pop()
     let floor = floorsCalled.pop()
+    let door = lift.childNodes[0]
 
     let liftPos = lift.offsetTop
     let floorPos = floors[floor].offsetTop
     let direction = liftPos > floorPos ? -1 : 1
-    let animation = setInterval(frame, 10)
+    // Lift needs to move 120 pixels in 2 seconds -> 16.67 ms per pixel
+    let animation = setInterval(moveframe, 16)
+    let dooranimation = null
 
-    function frame() {
+    function moveframe() {
         if (liftPos === floorPos) {
-            liftsAvailable.push(lift)
             clearInterval(animation)
+            dooranimation = setInterval(openDoor, 50)
         } else {
             liftPos += direction
             lift.style.top = liftPos + "px"
+        }
+    }
+
+    function openDoor() {
+        let doorPos = door.offsetLeft
+        let doorWidth = door.offsetWidth
+        if (doorPos == 0) {
+            clearInterval(dooranimation)
+            // Doors cover 50 pixels in 2.5 seconds -> 50 ms per pixel
+            dooranimation = setInterval(closeDoor, 50)
+        } else {
+            doorPos -= 1
+            doorWidth += 2
+            door.style.left = doorPos + "px"
+            door.style.width = doorWidth + "px"
+        }
+    }
+
+    function closeDoor() {
+        let doorPos = door.offsetLeft
+        let doorWidth = door.offsetWidth
+        if (doorPos == 49) {
+            clearInterval(dooranimation)
+            liftsAvailable.push(lift)
+        } else {
+            doorPos += 1
+            doorWidth -= 2
+            door.style.left = doorPos + "px"
+            door.style.width = doorWidth + "px"
         }
     }
 }

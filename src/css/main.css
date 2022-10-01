@@ -1,3 +1,22 @@
+body {
+    background-color: #111;
+    color: whitesmoke;
+}
+
+button {
+    background-color: yellowgreen;
+    color: black;
+    border: none;
+}
+
+.btn {
+    background-color: yellowgreen;
+    color: black;
+    border: none;
+    width: 50px;
+    margin: 1em;
+}
+
 .controls {
     display: flex;
     justify-content: center;
@@ -7,15 +26,25 @@
 
 .floor {
     display: flex;
-    height: 125px;
+    flex-direction: column;
+    justify-content: center;
+    height: 120px;
     border-bottom: 2px solid black;
-    align-items: center;
 }
 
 .lift {
-    height: 125px;
-    width: 5%;
+    height: 120px;
+    width: 100px;
     background-color: lightblue;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+}
+
+.door {
+    background-color: white;
+    min-width: 2px;
+    height: 100%;
     position: absolute;
 }
 
