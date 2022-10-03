@@ -1,5 +1,8 @@
+# [Demo Link](https://lift-simulationn.netlify.app/)
+
 # Lift-Simulation
 Create a web app where you can simulate lift mechanics for a client
+
 
 # UI Example
 ![Lift Simulation Example](Lift-Simulation-Example.png "Lift Simulation Example")
