@@ -17,11 +17,8 @@ button {
     margin: 1em;
 }
 
-.controls {
-    display: flex;
-    justify-content: center;
+#controls {
     border-bottom: 2px solid black;
-    height: 100px;
 }
 
 .floor {

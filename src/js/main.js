@@ -5,9 +5,12 @@ let liftsAvailable = []
 
 function generate() {
     let simulation = document.getElementById("simulation")
+    let controls = document.getElementById("controls")
     simulation.innerHTML = ''
     floors = []
     lifts = []
+    floorsCalled = []
+    liftsAvailable = []
 
     let floorCount = +document.getElementById("floor-count").value
     let liftCount = +document.getElementById("lift-count").value
@@ -24,6 +27,8 @@ function generate() {
         let floor = document.createElement('div')
         floor.id = `floor-${i}`
         floor.className = 'floor'
+        floor.style.width = (150 * (liftCount + 1)) + "px"
+        controls.style.width = (150 * (liftCount + 1)) + "px"
 
         if (i != 0) {
             let button = document.createElement('button')
@@ -48,13 +53,14 @@ function generate() {
     }
 
     let offset = floors[floors.length - 1].offsetTop
-    let leftOffset = 100;
+    let leftOffset = 150
     for (let i = 0; i < liftCount; i++) {
         let lift = document.createElement('div')
         lift.className = 'lift'
         simulation.appendChild(lift)
         lift.style.top = offset + "px"
-        lift.style.left = (leftOffset + i * 150) + "px"
+        lift.style.left = (leftOffset) + "px"
+        leftOffset += 150
         let door = document.createElement('div')
         door.className = 'door'
         lift.appendChild(door)
@@ -68,7 +74,6 @@ function generate() {
 
 function callLift(floor) {
     floorsCalled.push(floor)
-    moveLift()
 }
 
 function delay (miliseconds) {
@@ -79,13 +84,13 @@ function delay (miliseconds) {
     })
 }
 
-async function moveLift() {
-    while (liftsAvailable.length === 0) {
-        await delay(100)
+function moveLift() {
+    if (liftsAvailable.length === 0 || floorsCalled.length === 0) {
+        return
     }
 
     let lift = liftsAvailable.pop()
-    let floor = floorsCalled.pop()
+    let floor = floorsCalled.shift()
     let door = lift.childNodes[0]
 
     let liftPos = lift.offsetTop
@@ -136,3 +141,4 @@ async function moveLift() {
 }
 
 generate()
+setInterval(moveLift, 100)
