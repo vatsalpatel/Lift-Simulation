@@ -1,0 +1,50 @@
+body {
+    background-color: #111;
+    color: whitesmoke;
+}
+
+button {
+    background-color: yellowgreen;
+    color: black;
+    border: none;
+}
+
+.btn {
+    background-color: yellowgreen;
+    color: black;
+    border: none;
+    width: 50px;
+    margin: 1em;
+}
+
+#controls {
+    border-bottom: 2px solid black;
+}
+
+.floor {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 120px;
+    border-bottom: 2px solid black;
+}
+
+.lift {
+    height: 120px;
+    width: 100px;
+    background-color: lightblue;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+}
+
+.door {
+    background-color: white;
+    min-width: 2px;
+    height: 100%;
+    position: absolute;
+}
+
+.simulation {
+    display: flex;
+}
